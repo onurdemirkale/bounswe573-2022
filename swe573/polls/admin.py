@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+# Registers the Question model to be modifiable through the admin framework.
+from .models import Question
+
+admin.site.register(Question)
