@@ -77,9 +77,11 @@ WSGI_APPLICATION = 'swe573.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rhonur',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': 'swe573',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
