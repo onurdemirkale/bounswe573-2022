@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,14 +20,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t==peulfn-q1x4ogp)%cnd+(@-=+n&px$whv_3b5u9rnayhbq&'
+# SECURITY WARNING: To keep the SECRET_KEY used in production secret, 
+# the SECRET_KEY is retrieved from the environment variables.
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY WARNING: DEBUG setting will be retrieved from the environment 
+# variables to ensure that is not turned on during production.
+# Environment variables come as a string, it is converted here to 
+# integer first then a bool. Default value is 0.
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
+# ALLOWED_HOSTS is a security feature of Django to prevent HTTP Host 
+# header attacks. The ALLOWED_HOSTS represent the host/domain names
+# that the Django site can serve. The host names need to be specified 
+# for production.
 ALLOWED_HOSTS = []
 
+# Environment variables come as a string. To retrieve ALLOWED_HOSTS
+# environment variable, comma-separated list of different hostnames  
+# are split and assigned to allowed hosts.
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        os.environ.get('ALLOWED_HOSTS', '').split(','),
+    )
+)
 
 # Application definition
 
