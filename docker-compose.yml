@@ -10,15 +10,19 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
   web:
-    image: rhonur/swe573:latest
+    build:
+      context: .
     command: python ./swe573/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/swe573-volume
     ports:
       - '8000:8000'
     environment:
-      - POSTGRES_NAME=swe573
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - DB_HOST=db
+      - DB_NAME=swe573
+      - DB_PASSWORD=admin
+      - DB_USER=admin
+      - SECRET_KEY=developmentSecretKey
+      - DEBUG=1
     depends_on:
       - db
