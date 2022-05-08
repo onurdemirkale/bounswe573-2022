@@ -14,10 +14,12 @@ services:
       context: .
     command: >
       sh -c "python ./swe573/manage.py wait_for_db &&
+             python ./swe573/manage.py makemigrations &&
              python ./swe573/manage.py migrate &&
              python ./swe573/manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/swe573-volume
+      - ./swe573:/swe573
+      - ./data/web:/vol/web
     ports:
       - '8000:8000'
     environment:
