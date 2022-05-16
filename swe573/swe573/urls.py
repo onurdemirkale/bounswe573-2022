@@ -18,8 +18,14 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from coLearn.views import (
+    learning_space_view,
+    explore_view
+)
+
 urlpatterns = [
-    path('learningspace/', include('coLearn.urls')),
+    path('explore/', explore_view),
+    path('learningspace/<int:learning_space_id>/', learning_space_view),
     path('admin/', admin.site.urls),
 ]
 

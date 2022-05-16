@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<meta
+			name="description"
+			content="swe 573 projet, co-learn web application"
+		/>
+		<meta name="author" content="onur demirkale" />
+
+		<title>Co-Learn</title>
+
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<!-- Navbar -->
+		{%include 'navbar_unauth.html'%}
+		<!-- Navbar End -->
+				<!-- Main -->
+				<div class="album py-5 bg-light">
+					<div class="container">
+						<div class="row">
+							<!-- Learning Space Cards-->
+							{% if learning_spaces %} {% for l in learning_spaces %}
+							<div class="col-md-4">
+								<div class="card mb-4 box-shadow">
+									<img
+										class="card-img-top"
+										style="max-width:400px;width:100%"
+										src="{{l.thumbnail.url}}"
+										alt="Learning Space Image"
+									/>
+									<div class="card-body">
+										<p class="card-text">
+											{{l.overview}}
+										</p>
+										<div
+											class="d-flex justify-content-between align-items-center"
+										>
+											<div class="btn-group">
+												<a class="btn btn-sm btn-outline-secondary" href="/learningspace/{{l.id}}">View</a>
+											</div>
+											<small class="text-muted">9 mins</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}{% endif %}
+							<!-- Learning Space Cards End-->
+						</div>
+					</div>
+				</div>
+			</main>
+				<!-- Main End-->
+
+		<!-- Footer -->
+		{%include 'footer.html'%}
+		<!-- Footer end-->
+	</body>
+</html>
