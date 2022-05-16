@@ -20,9 +20,11 @@ from django.conf import settings
 
 from coLearn.views import (
     learning_space_view,
+    explore_view
 )
 
 urlpatterns = [
+    path('explore/', explore_view),
     path('learningspace/<int:learning_space_id>/', learning_space_view),
     path('admin/', admin.site.urls),
 ]
