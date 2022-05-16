@@ -70,10 +70,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'swe573.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"], # Specifies the templates directory.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
