@@ -17,3 +17,12 @@ def learning_space_view(request, learning_space_id):
 
   return render(request, 'learningSpace/learning_space_unauth.html', context)
 
+def explore_view(request):
+
+  learningSpaces = LearningSpace.objects.all()
+
+  context = {
+    'learning_spaces' : learningSpaces
+  }
+
+  return render(request, 'explore/explore_unauth.html', context)
