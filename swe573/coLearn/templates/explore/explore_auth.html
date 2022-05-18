@@ -34,31 +34,7 @@
 						</div>
 						<div class="row">
 							<!-- Learning Space Cards-->
-							{% if learning_spaces %} {% for l in learning_spaces %}
-							<div class="col-md-4">
-								<div class="card mb-4 box-shadow">
-									<img
-										class="card-img-top"
-										style="max-width:400px;width:100%"
-										src="{{l.thumbnail.url}}"
-										alt="Learning Space Image"
-									/>
-									<div class="card-body">
-										<p class="card-text">
-											{{l.overview}}
-										</p>
-										<div
-											class="d-flex justify-content-between align-items-center"
-										>
-											<div class="btn-group">
-												<a class="btn btn-sm btn-outline-secondary" href="/learningspace/{{l.id}}">View</a>
-											</div>
-											<small class="text-muted">9 mins</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							{% endfor %}{% endif %}
+							{%include 'explore/learning_space_card.html'%}
 							<!-- Learning Space Cards End-->
 						</div>
 					</div>
