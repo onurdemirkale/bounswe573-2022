@@ -100,7 +100,7 @@ def profile_view(request, user_id):
   def profile_edit_view(request, user_id):
 
   # TODO: Implement authentication.
-  
+
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
 
@@ -115,3 +115,17 @@ def profile_view(request, user_id):
   }
 
   return render(request, 'profile/profile_edit.html', context)
+
+  # Quizzes views.
+
+  def quiz_view(request, learning_space_id, quiz_id):
+
+    context = {}
+
+    return render(request, 'quiz/quiz.html', context)
+
+  def quiz_create_view(request, learning_space_id):
+
+    context = {}
+
+    return render(request, 'quiz/quiz_create.html', context)
