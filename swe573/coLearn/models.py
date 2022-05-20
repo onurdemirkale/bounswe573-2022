@@ -5,11 +5,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Sample model used for testing purposes.
-class Sample(models.Model):
-  # Used for testing user uploaded media files.
-  attachment = models.FileField() 
-
 # Username, first name, last name, password and e-mail adress 
 # is already handled by the django auth model. 
 # The Profile Django model is used to store the extra information
@@ -18,6 +13,7 @@ class CoLearnUser(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE) # Used to extend the Auth User.
   interests = ArrayField(models.CharField(max_length=100), blank=True, null=True)
   background = models.TextField(max_length=1000, blank=True)
+  profile_picture = models.FileField(blank=True) 
   bio = models.TextField(max_length=1000, blank=True)
   birth_date = models.DateField(null=True, blank=True)
 
@@ -50,41 +46,31 @@ class ChatMessage(models.Model):
     chat_id = models.ForeignKey(Chat, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
 
-# Question Model used by Quiz to store a Question created by a user.
+# Answer sent to a Question.
+class Answer(models.Model):
+  sender = models.ForeignKey(CoLearnUser, on_delete=models.CASCADE, related_name='answer_sender')
+  content = models.CharField(max_length=500, blank=True)
+
+# Model used for Questions.
 class Question(models.Model):
+  question_title = models.CharField(max_length=100)
+  author = models.ForeignKey(CoLearnUser, on_delete=models.PROTECT)
+  question_content = models.CharField(max_length=500)
+  answers = models.ManyToManyField(Answer, blank=True)
+  date_created = models.DateTimeField(auto_now_add=True)
+
+# Quiz Question Model used by Quiz to store a Question and Answers created by a user.
+class QuizQuestion(models.Model):
   question = models.CharField(max_length=500)
   answers = ArrayField(models.CharField(max_length=200))
   correct_answer = models.CharField(max_length=500)
 
-# Model used for Quizzes created through Topics. 
+# Model used for Quizzes.
 class Quiz(models.Model):
-  quiz_description = models.CharField(max_length=500)
-  questions = models.ManyToManyField(Question)
-
-# Reply Model used by Post to store a Reply created by a user.
-class Reply(models.Model):
-  sender = models.ForeignKey(CoLearnUser, on_delete=models.CASCADE, related_name='reply_sender')
-  content = models.CharField(max_length=500, blank=True)
-
-# Model used for Posts created through Topics.
-class Post(models.Model):
-  post_content = models.CharField(max_length=500)
-  replies = models.ManyToManyField(Reply, blank=True)
- 
-# Types of topics that can be created.
-TOPIC_TYPES = [
-  ("quiz", "quiz"),
-  ("post", "post"),
-]
-
-# The topics that are created in a LearningSpace.
-class Topic(models.Model):
-  topic_title = models.CharField(max_length=100)
+  title = models.CharField(max_length=100)
   author = models.ForeignKey(CoLearnUser, on_delete=models.PROTECT)
-  topic_content = models.CharField(max_length=500)
-  topic_type = models.CharField(choices=TOPIC_TYPES, max_length=100)
-  quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, blank=True, null=True)
-  post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
+  description = models.CharField(max_length=500)
+  questions = models.ManyToManyField(QuizQuestion)
   date_created = models.DateTimeField(auto_now_add=True)
 
 # Model used for Learning Spaces.
@@ -95,5 +81,6 @@ class LearningSpace(models.Model):
   title = models.CharField(max_length=100)
   keywords = ArrayField(models.CharField(max_length=100), blank=True)
   subscribers = models.ManyToManyField(CoLearnUser, blank=True)
-  topics = models.ManyToManyField(Topic, blank=True)
+  questions = models.ManyToManyField(Question, blank=True) 
+  quizzes = models.ManyToManyField(Quiz, blank=True)
   date_created = models.DateTimeField(auto_now_add=True)
