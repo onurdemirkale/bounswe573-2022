@@ -73,16 +73,6 @@ class Quiz(models.Model):
   questions = models.ManyToManyField(QuizQuestion)
   date_created = models.DateTimeField(auto_now_add=True)
 
-# Reply Model used by Post to store a Reply created by a user.
-class Reply(models.Model):
-  sender = models.ForeignKey(CoLearnUser, on_delete=models.CASCADE, related_name='reply_sender')
-  content = models.CharField(max_length=500, blank=True)
-
-# Model used for Posts created through Topics.
-class Post(models.Model):
-  post_content = models.CharField(max_length=500)
-  replies = models.ManyToManyField(Reply, blank=True)
-
 # Model used for Learning Spaces.
 class LearningSpace(models.Model):
   overview = models.CharField(max_length=1000)
