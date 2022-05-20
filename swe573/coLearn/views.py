@@ -41,6 +41,19 @@ def learning_space_view(request, learning_space_id):
   context = {}
   return render(request, 'learningSpace/learning_space_create.html', context)
 
+  def learning_space_edit_view(request , learning_space_id):
+  learningSpace = LearningSpace.objects.get(pk=learning_space_id)
+
+  context = {
+    'title' : learningSpace.title,
+    'overview' : learningSpace.overview,
+    'prerequisites' : learningSpace.prerequisites,
+    'keywords': learningSpace.keywords,
+    'id': learningSpace.id
+  }
+
+  return render(request, 'learningSpace/learning_space_edit.html', context)
+
 # Explore views.
 
 def explore_view(request):
