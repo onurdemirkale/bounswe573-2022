@@ -50,12 +50,14 @@ class ChatMessage(models.Model):
 class Answer(models.Model):
   sender = models.ForeignKey(CoLearnUser, on_delete=models.CASCADE, related_name='answer_sender')
   content = models.CharField(max_length=500, blank=True)
-  
-# Question Model used by Quiz to store a Question created by a user.
+
+# Model used for Questions.
 class Question(models.Model):
-  question = models.CharField(max_length=500)
-  answers = ArrayField(models.CharField(max_length=200))
-  correct_answer = models.CharField(max_length=500)
+  question_title = models.CharField(max_length=100)
+  author = models.ForeignKey(CoLearnUser, on_delete=models.PROTECT)
+  question_content = models.CharField(max_length=500)
+  answers = models.ManyToManyField(Answer, blank=True)
+  date_created = models.DateTimeField(auto_now_add=True)
 
 # Model used for Quizzes created through Topics. 
 class Quiz(models.Model):
