@@ -70,4 +70,10 @@ def explore_view(request):
 
   return render(request, 'explore/explore.html', context)
 
-  
+# Authentication views.
+
+def sign_up_view(request):
+  return render(request, 'signUp/sign_up.html')
+
+def sign_in_view(request):
+  return render(request, 'signIn/sign_in.html')
