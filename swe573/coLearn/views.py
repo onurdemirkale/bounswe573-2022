@@ -77,3 +77,22 @@ def sign_up_view(request):
 
 def sign_in_view(request):
   return render(request, 'signIn/sign_in.html')
+
+# User Profile view.
+
+def profile_view(request, user_id):
+
+  coLearnUser = CoLearnUser.objects.get(pk=user_id)
+  learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+
+  context = {
+    'first_name' : coLearnUser.user.first_name,
+    'last_name' : coLearnUser.user.last_name,
+    'bio' : coLearnUser.bio,
+    'background': coLearnUser.background,
+    'interests': coLearnUser.interests,
+    'user_id': coLearnUser.id,
+    'learning_spaces': learningSpaces
+  }
+
+  return render(request, 'profile/profile.html', context)
