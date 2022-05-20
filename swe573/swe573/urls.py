@@ -23,12 +23,16 @@ from coLearn.views import (
     explore_view,
     sign_up_view,
     sign_in_view,
+    profile_view,
+    profile_edit_view
 )
 
 urlpatterns = [
     path('explore/', explore_view),
     path('signup/', sign_up_view),
     path('signin/', sign_in_view),
+    path('user/<int:user_id>/', profile_view),
+    path('user/<int:user_id>/edit', profile_edit_view),
     path('learningspace/<int:learning_space_id>/', learning_space_view),
     path('admin/', admin.site.urls),
 ]
