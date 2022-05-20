@@ -35,6 +35,12 @@ def learning_space_view(request, learning_space_id):
 
   return render(request, 'learningSpace/learning_space.html', context)
 
+  def learning_space_create_view(request):
+  # TODO: Enforce user authentication.
+
+  context = {}
+  return render(request, 'learningSpace/learning_space_create.html', context)
+
 # Explore views.
 
 def explore_view(request):
@@ -50,3 +56,5 @@ def explore_view(request):
   }
 
   return render(request, 'explore/explore.html', context)
+
+  
