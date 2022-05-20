@@ -24,11 +24,20 @@
 	</head>
 	<body>
 		<!-- Navbar -->
-		{%include 'navbar_unauth.html'%}
+    {% if user_authenticated %}
+    {%include 'navbar_auth.html'%}
+    {% else %}
+    {%include 'navbar_unauth.html'%}
+    {% endif %}
 		<!-- Navbar End -->
 				<!-- Main -->
 				<div class="album py-5 bg-light">
 					<div class="container">
+            {% if user_authenticated %}
+            <div class="py-3 text-center">
+							<a class="btn btn-sm btn-outline-secondary" href="/learningspace/create">Create a Learning Space</a>
+						</div>
+            {% endif %}
 						<div class="row">
 							<!-- Learning Space Cards-->
 							{%include 'explore/learning_space_card.html'%}
