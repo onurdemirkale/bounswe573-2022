@@ -35,13 +35,13 @@ def learning_space_view(request, learning_space_id):
 
   return render(request, 'learningSpace/learning_space.html', context)
 
-  def learning_space_create_view(request):
+def learning_space_create_view(request):
   # TODO: Enforce user authentication.
 
   context = {}
   return render(request, 'learningSpace/learning_space_create.html', context)
 
-  def learning_space_edit_view(request , learning_space_id):
+def learning_space_edit_view(request , learning_space_id):
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
 
   context = {
@@ -64,7 +64,7 @@ def explore_view(request):
   user_authenticated = False
 
   context = {
-    'learning_spaces' : learningSpaces
+    'learning_spaces' : learningSpaces,
     'user_authenticated': user_authenticated
   }
 
@@ -97,7 +97,7 @@ def profile_view(request, user_id):
 
   return render(request, 'profile/profile.html', context)
 
-  def profile_edit_view(request, user_id):
+def profile_edit_view(request, user_id):
 
   # TODO: Implement authentication.
 
@@ -116,29 +116,29 @@ def profile_view(request, user_id):
 
   return render(request, 'profile/profile_edit.html', context)
 
-  # Quizzes views.
+# Quizzes views.
 
-  def quiz_view(request, learning_space_id, quiz_id):
+def quiz_view(request, learning_space_id, quiz_id):
 
     context = {}
 
     return render(request, 'quiz/quiz.html', context)
 
-  def quiz_create_view(request, learning_space_id):
+def quiz_create_view(request, learning_space_id):
 
     context = {}
 
     return render(request, 'quiz/quiz_create.html', context)
 
-  # Questions views.
+# Questions views.
 
-  def question_view(request, learning_space_id, question_id):
+def question_view(request, learning_space_id, question_id):
 
     context = {}
 
     return render(request, 'question/question.html', context)
 
-  def question_create_view(request, learning_space_id):
+def question_create_view(request, learning_space_id):
 
     context = {}
 
