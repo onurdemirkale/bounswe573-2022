@@ -35,12 +35,18 @@ def learning_space_view(request, learning_space_id):
 
   return render(request, 'learningSpace/learning_space.html', context)
 
+# Explore views.
+
 def explore_view(request):
 
   learningSpaces = LearningSpace.objects.all()
 
+  # TODO: Dummy value until authenticated is implemented.
+  user_authenticated = False
+
   context = {
     'learning_spaces' : learningSpaces
+    'user_authenticated': user_authenticated
   }
 
-  return render(request, 'explore/explore_unauth.html', context)
+  return render(request, 'explore/explore.html', context)
