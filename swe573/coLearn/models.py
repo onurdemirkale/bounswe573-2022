@@ -46,6 +46,11 @@ class ChatMessage(models.Model):
     chat_id = models.ForeignKey(Chat, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
 
+# Answer sent to a Question.
+class Answer(models.Model):
+  sender = models.ForeignKey(CoLearnUser, on_delete=models.CASCADE, related_name='answer_sender')
+  content = models.CharField(max_length=500, blank=True)
+  
 # Question Model used by Quiz to store a Question created by a user.
 class Question(models.Model):
   question = models.CharField(max_length=500)
