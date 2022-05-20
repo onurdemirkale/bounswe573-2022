@@ -129,3 +129,17 @@ def profile_view(request, user_id):
     context = {}
 
     return render(request, 'quiz/quiz_create.html', context)
+
+  # Questions views.
+
+  def question_view(request, learning_space_id, question_id):
+
+    context = {}
+
+    return render(request, 'question/question.html', context)
+
+  def question_create_view(request, learning_space_id):
+
+    context = {}
+
+    return render(request, 'question/question_create.html', context)
