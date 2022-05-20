@@ -82,22 +82,6 @@ class Reply(models.Model):
 class Post(models.Model):
   post_content = models.CharField(max_length=500)
   replies = models.ManyToManyField(Reply, blank=True)
- 
-# Types of topics that can be created.
-TOPIC_TYPES = [
-  ("quiz", "quiz"),
-  ("post", "post"),
-]
-
-# The topics that are created in a LearningSpace.
-class Topic(models.Model):
-  topic_title = models.CharField(max_length=100)
-  author = models.ForeignKey(CoLearnUser, on_delete=models.PROTECT)
-  topic_content = models.CharField(max_length=500)
-  topic_type = models.CharField(choices=TOPIC_TYPES, max_length=100)
-  quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, blank=True, null=True)
-  post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
-  date_created = models.DateTimeField(auto_now_add=True)
 
 # Model used for Learning Spaces.
 class LearningSpace(models.Model):
