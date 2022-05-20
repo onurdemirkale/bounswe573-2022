@@ -5,11 +5,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Sample model used for testing purposes.
-class Sample(models.Model):
-  # Used for testing user uploaded media files.
-  attachment = models.FileField() 
-
 # Username, first name, last name, password and e-mail adress 
 # is already handled by the django auth model. 
 # The Profile Django model is used to store the extra information
