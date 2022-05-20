@@ -65,10 +65,13 @@ class QuizQuestion(models.Model):
   answers = ArrayField(models.CharField(max_length=200))
   correct_answer = models.CharField(max_length=500)
 
-# Model used for Quizzes created through Topics. 
+# Model used for Quizzes.
 class Quiz(models.Model):
-  quiz_description = models.CharField(max_length=500)
-  questions = models.ManyToManyField(Question)
+  title = models.CharField(max_length=100)
+  author = models.ForeignKey(CoLearnUser, on_delete=models.PROTECT)
+  description = models.CharField(max_length=500)
+  questions = models.ManyToManyField(QuizQuestion)
+  date_created = models.DateTimeField(auto_now_add=True)
 
 # Reply Model used by Post to store a Reply created by a user.
 class Reply(models.Model):
