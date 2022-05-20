@@ -81,5 +81,6 @@ class LearningSpace(models.Model):
   title = models.CharField(max_length=100)
   keywords = ArrayField(models.CharField(max_length=100), blank=True)
   subscribers = models.ManyToManyField(CoLearnUser, blank=True)
-  topics = models.ManyToManyField(Topic, blank=True)
+  questions = models.ManyToManyField(Question, blank=True) 
+  quizzes = models.ManyToManyField(Quiz, blank=True)
   date_created = models.DateTimeField(auto_now_add=True)
