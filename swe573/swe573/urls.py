@@ -19,6 +19,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from coLearn.views import (
+    learning_space_create_view,
+    learning_space_edit_view,
     learning_space_view,
     explore_view,
     sign_up_view,
@@ -33,7 +35,9 @@ urlpatterns = [
     path('signin/', sign_in_view),
     path('user/<int:user_id>/', profile_view),
     path('user/<int:user_id>/edit', profile_edit_view),
+    path('learningspace/create/', learning_space_create_view),
     path('learningspace/<int:learning_space_id>/', learning_space_view),
+    path('learningspace/<int:learning_space_id>/edit/', learning_space_edit_view),
     path('admin/', admin.site.urls),
 ]
 
