@@ -59,6 +59,12 @@ class Question(models.Model):
   answers = models.ManyToManyField(Answer, blank=True)
   date_created = models.DateTimeField(auto_now_add=True)
 
+# Quiz Question Model used by Quiz to store a Question and Answers created by a user.
+class QuizQuestion(models.Model):
+  question = models.CharField(max_length=500)
+  answers = ArrayField(models.CharField(max_length=200))
+  correct_answer = models.CharField(max_length=500)
+
 # Model used for Quizzes created through Topics. 
 class Quiz(models.Model):
   quiz_description = models.CharField(max_length=500)
