@@ -70,7 +70,7 @@
 								type="text"
 								class="form-control"
 								id="prerequisites"
-								value="{{prerequisites}}"
+								value="{{ prerequisites|join:', ' }}"
 								placeholder="Prerequisite 1, Prerequisite 2..."
 							/>
 						</div>
@@ -84,8 +84,8 @@
 								class="form-control"
 								id="keywords"
 								placeholder="Keyword 1, Keyword 2..."
-								value="{{keywords}}"
-							/>
+								value="{{ keywords|join:', ' }}"
+							></input>
 						</div>
 					</div>
 
