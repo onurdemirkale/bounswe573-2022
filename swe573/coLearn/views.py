@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
-from .models import LearningSpace
+from .models import LearningSpace, CoLearnUser
 
 # Learning Space views.
 
