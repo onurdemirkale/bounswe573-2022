@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser
-from .forms import LearningSpaceCreateForm
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm
 
 # Learning Space views.
 
@@ -49,7 +49,14 @@ def learning_space_create_view(request):
     return render(request, 'learningSpace/learning_space_create.html', context)
 
 def learning_space_edit_view(request , learning_space_id):
+  # TODO: Enforce user authentication.
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
+  if request.method == "POST":
+    form = LearningSpaceEditForm(request.POST, request.FILES or None)
+    if form.is_valid():
+      result = LearningSpace.objects.filter(pk=learning_space_id).update(**form.cleaned_data)
+      if(result):
+        return redirect('/learningspace/%d' % learning_space_id )
 
   context = {
     'title' : learningSpace.title,
