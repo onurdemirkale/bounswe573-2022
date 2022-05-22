@@ -1,7 +1,7 @@
 from django.contrib.postgres.forms import SimpleArrayField
 from django import forms
 
-class LearningSpaceForm(forms.Form):
+class LearningSpaceCreateForm(forms.Form):
   title = forms.CharField(max_length=100)
   overview = forms.CharField(max_length=1000)
   prerequisites = SimpleArrayField(forms.CharField(max_length=100), delimiter=',')
