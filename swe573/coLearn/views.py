@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser
-from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignUpForm
-from django.contrib.auth import get_user_model
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm
+from django.contrib.auth import authenticate, login, get_user_models
 
 # Learning Space views.
 
@@ -109,8 +109,18 @@ def sign_up_view(request):
   return render(request, 'signUp/sign_up.html', {'form':signUpForm})
 
 def sign_in_view(request):
+  signInForm = SignInForm(request.POST or None)
+  if signInForm.is_valid():
+    username = signInForm.cleaned_data.get('username')
+    password = signInForm.cleaned_data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user != None:
+      login(request, user)
+      return redirect('/explore')
+    else:
+      request.session['authentication_failed'] = 1
   return render(request, 'signIn/sign_in.html')
-
+  
 # User Profile view.
 
 def profile_view(request, user_id):
