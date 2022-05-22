@@ -106,7 +106,7 @@ def sign_up_view(request):
       return redirect('/explore')
     else:
       request.session['sign_up_failed'] = 1
-  return render(request, 'signUp/sign_up.html')
+  return render(request, 'signUp/sign_up.html', {'form':signUpForm})
 
 def sign_in_view(request):
   return render(request, 'signIn/sign_in.html')
