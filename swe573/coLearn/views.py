@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser
+from .forms import LearningSpaceCreateForm
 
 # Learning Space views.
 
@@ -37,9 +38,15 @@ def learning_space_view(request, learning_space_id):
 
 def learning_space_create_view(request):
   # TODO: Enforce user authentication.
-
-  context = {}
-  return render(request, 'learningSpace/learning_space_create.html', context)
+  if request.method == "POST":
+    form = LearningSpaceCreateForm(request.POST, request.FILES or None)
+    if form.is_valid():
+      space_created = LearningSpace.objects.create(**form.cleaned_data)
+      if(space_created):
+        return redirect('/learningspace/%d' % space_created.id )
+  else:
+    context = {}
+    return render(request, 'learningSpace/learning_space_create.html', context)
 
 def learning_space_edit_view(request , learning_space_id):
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
