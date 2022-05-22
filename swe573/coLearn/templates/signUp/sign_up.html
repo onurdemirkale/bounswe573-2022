@@ -31,66 +31,9 @@
 				<h2>Sign Up</h2>
 			</div>
 			<div class="flex-row justify-content-center d-flex">
-				<form
-					method="POST"
-					action="/signup"
-					class="needs-validation"
-					novalidate
-				>
-					<div class="form-group">
-						<label for="username">Username</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="inputGroupPrepend">@</span>
-							</div>
-							<input
-								type="text"
-								class="form-control"
-								id="username"
-								placeholder="Username"
-								aria-describedby="inputGroupPrepend"
-								required
-							/>
-							<div class="invalid-feedback">Please enter a valid username.</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="firstName">First name</label>
-						<input
-							type="text"
-							class="form-control"
-							id="firstName"
-							placeholder="First name"
-							required
-						/>
-						<div class="invalid-feedback">Please enter a valid first name.</div>
-					</div>
-
-					<div class="form-group">
-						<label for="lastName">Last name</label>
-						<input
-							type="text"
-							class="form-control"
-							id="lastName"
-							placeholder="Last name"
-							required
-						/>
-						<div class="invalid-feedback">Please enter a valid last name.</div>
-					</div>
-
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input
-							type="email"
-							class="form-control"
-							id="email"
-							placeholder="Email"
-							required
-						/>
-						<div class="invalid-feedback">Please enter a valid e-mail.</div>
-					</div>
-
+				<form method="POST" action=".">
+					{% csrf_token %}{{form}}
+					<br />
 					<div class="text-center form-group">
 						<button class="btn btn-primary" type="submit">Sign Up</button>
 					</div>
@@ -102,33 +45,3 @@
 		<!-- Footer end-->
 	</body>
 </html>
-
-<!-- JavaScript for disabling form submissions if there are invalid fields -->
-<script>
-	(function () {
-		'use strict';
-		window.addEventListener(
-			'load',
-			function () {
-				// Fetch all the forms we want to apply custom Bootstrap validation styles to
-				var forms = document.getElementsByClassName('needs-validation');
-				// Loop over them and prevent submission
-				var validation = Array.prototype.filter.call(forms, function (form) {
-					form.addEventListener(
-						'submit',
-						function (event) {
-							if (form.checkValidity() === false) {
-								event.preventDefault();
-								event.stopPropagation();
-							}
-							form.classList.add('was-validated');
-						},
-						false
-					);
-				});
-			},
-			false
-		);
-	})();
-</script>
-<!-- JavaScript End -->
