@@ -29,9 +29,23 @@ class SignInForm(forms.Form):
     return username
 
 class SignUpForm(forms.Form):
-    username = forms.CharField(label='Username', widget=forms.TextInput(attrs={"class": "form-control"}))
-    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={"class": "form-control"}))
-    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={"class": "form-control"}))
-    email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={"class": "form-control"}))
-    password1 = forms.CharField(label='Password',widget=forms.PasswordInput(attrs={"class": "form-control"}))
-    password2 = forms.CharField(label='Confirm Password',widget=forms.PasswordInput(attrs={"class": "form-control"}))
+  username = forms.CharField(label='Username', widget=forms.TextInput(attrs={"class": "form-control"}))
+  first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={"class": "form-control"}))
+  last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={"class": "form-control"}))
+  email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={"class": "form-control"}))
+  password = forms.CharField(label='Password',widget=forms.PasswordInput(attrs={"class": "form-control"}))
+  confirm_password = forms.CharField(label='Confirm Password',widget=forms.PasswordInput(attrs={"class": "form-control"}))
+
+  def validate_email(self):
+    email = self.clenaned_data.get("email")
+    email_query = User.objects.filter(email_ieaxact=email)
+    if email_query.exists():
+      raise forms.ValidationError('This email already exists.')
+    return email
+
+  def validate_username(self):
+    username = self.clenaned_data.get("username")
+    username_query = User.objects.filter(username_iexact=username)
+    if not username_query.exists():
+      raise forms.ValidationError('This username already exists.')
+    return username
