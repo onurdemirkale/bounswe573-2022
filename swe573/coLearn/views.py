@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser
 from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm
-from django.contrib.auth import authenticate, login, get_user_models
+from django.contrib.auth import authenticate, login, get_user_model
 
 # Learning Space views.
 
@@ -119,7 +119,7 @@ def sign_in_view(request):
       return redirect('/explore')
     else:
       request.session['authentication_failed'] = 1
-  return render(request, 'signIn/sign_in.html')
+  return render(request, 'signIn/sign_in.html', {'form':signInForm})
   
 # User Profile view.
 
