@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser
-from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 
@@ -145,9 +145,13 @@ def logout_view(request):
 # User Profile view.
 
 def profile_view(request, user_id):
-
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+
+  profilePictureForm = ProfilePictureForm(request.POST,request.FILES or None)
+  if profilePictureForm.is_valid():
+    coLearnUser.profile_picture = profilePictureForm.cleaned_data.get('profile_picture_upload')
+    coLearnUser.save()    
 
   context = {
     'first_name' : coLearnUser.user.first_name,
@@ -156,14 +160,14 @@ def profile_view(request, user_id):
     'background': coLearnUser.background,
     'interests': coLearnUser.interests,
     'user_id': coLearnUser.id,
-    'learning_spaces': learningSpaces
+    'learning_spaces': learningSpaces,
+    'profile_picture': coLearnUser.profile_picture
   }
 
   return render(request, 'profile/profile.html', context)
 
 @login_required
 def profile_edit_view(request, user_id):
-
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
 
