@@ -77,9 +77,9 @@ class Quiz(models.Model):
 class LearningSpace(models.Model):
   overview = models.CharField(max_length=1000)
   thumbnail = models.FileField(blank=True)
-  prerequisites = ArrayField(models.CharField(max_length=100), blank=True)
+  prerequisites = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list)
   title = models.CharField(max_length=100)
-  keywords = ArrayField(models.CharField(max_length=100), blank=True)
+  keywords = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list)
   subscribers = models.ManyToManyField(CoLearnUser, blank=True)
   questions = models.ManyToManyField(Question, blank=True) 
   quizzes = models.ManyToManyField(Quiz, blank=True)

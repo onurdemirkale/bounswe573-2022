@@ -28,6 +28,4 @@ ENV PATH="/scripts:$PATH"
 
 COPY . /code/
 
-EXPOSE 8000
-
 CMD ["run.sh"]

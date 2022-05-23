@@ -26,13 +26,15 @@ from coLearn.views import (
     sign_up_view,
     sign_in_view,
     profile_view,
-    profile_edit_view
+    profile_edit_view,
+    logout_view
 )
 
 urlpatterns = [
     path('explore/', explore_view, name='explore'),
     path('signup/', sign_up_view, name='sign-up'),
     path('signin/', sign_in_view, name='sign-in'),
+    path('logout/', logout_view, name='logout'),
     path('user/<int:user_id>/', profile_view, name='user-profile'),
     path('user/<int:user_id>/edit', profile_edit_view, name='user-profile-edit'),
     path('learningspace/create/', learning_space_create_view, name='learning-space-create'),
