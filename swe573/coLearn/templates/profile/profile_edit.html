@@ -32,13 +32,21 @@
 					<div>
 						<aside class="col-md-12">
 							<div class="card mb-4 box-shadow">
+								{% if profile_picture %}
 								<img
 									class="card-img-top"
 									style="max-width: 400px; width: 100%"
 									src="{{profile_picture.url}}"
 									alt="Profile Picture"
-									onerror="this.onerror=null;this.src='https:\/\/swe573.s3.eu-central-1.amazonaws.com/blank-profile-picture.png';"
 								/>
+								{% else %}
+								<img
+									class="card-img-top"
+									style="max-width: 400px; width: 100%"
+									src="https:\/\/swe573.s3.eu-central-1.amazonaws.com/blank-profile-picture.png"
+									alt="Profile Picture"
+								/>
+								{% endif %}
 								<div class="card-body">
 									<h4>{{first_name}} {{last_name}}</h4>
 								</div>
@@ -64,7 +72,13 @@
 					</div>
 				</div>
 				<div class="col-md-8">
-					<form method="POST" id="profile-edit" action="/user/{{user_id}}/edit">
+					<form
+						method="POST"
+						id="profile-edit"
+						action="/user/{{user_id}}/edit"
+						enctype="multipart/form-data"
+					>
+						{% csrf_token %}
 						<div class="card mb-4 box-shadow">
 							<div
 								class="card-header d-flex justify-content-between align-items-center"
@@ -76,9 +90,9 @@
 									<div>
 										<textarea
 											class="form-control"
-											id="overview"
+											name="bio"
 											rows="3"
-											required
+											form="profile-edit"
 										>
 {{bio}}</textarea
 										>
@@ -96,7 +110,7 @@
 							<div class="card-body">
 								<div class="form-group">
 									<div>
-										<textarea class="form-control" id="overview" rows="3">
+										<textarea class="form-control" name="background" rows="3">
 {{background}}</textarea
 										>
 									</div>
@@ -113,7 +127,12 @@
 							<div class="card-body">
 								<div class="form-group">
 									<div>
-										<textarea class="form-control" id="overview" rows="3">
+										<textarea
+											class="form-control"
+											name="interests"
+											placeholder="Interest 1, Interest 2..."
+											rows="3"
+										>
 {% for i in interests %}{{ i }}, {% endfor %}</textarea
 										>
 									</div>
