@@ -4,6 +4,7 @@ from django.template import loader
 from .models import LearningSpace, CoLearnUser
 from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
+from django.contrib.auth.decorators import login_required
 
 # Learning Space views.
 
@@ -18,8 +19,14 @@ def learning_space_view(request, learning_space_id):
   # Obtain the subscribers using the LearningSpace model.
   subscribers = learningSpace.subscribers.all()
 
-  # TODO: Dummy value until authenticated is implemented.
   user_authenticated = False
+  
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
 
   relatedSpaces = LearningSpace.objects.filter(keywords=learningSpace.keywords)
 
@@ -32,13 +39,14 @@ def learning_space_view(request, learning_space_id):
     'questions': questions,
     'subscribers': subscribers,
     'related_spaces': relatedSpaces,
-    'user_authenticated': user_authenticated
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
   }
 
   return render(request, 'learningSpace/learning_space.html', context)
 
+@login_required
 def learning_space_create_view(request):
-  # TODO: Enforce user authentication.
   if request.method == "POST":
     form = LearningSpaceCreateForm(request.POST, request.FILES or None)
     if form.is_valid():
@@ -49,8 +57,8 @@ def learning_space_create_view(request):
     context = {}
     return render(request, 'learningSpace/learning_space_create.html', context)
 
+@login_required
 def learning_space_edit_view(request , learning_space_id):
-  # TODO: Enforce user authentication.
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
   if request.method == "POST":
     form = LearningSpaceEditForm(request.POST, request.FILES or None)
@@ -75,12 +83,17 @@ def explore_view(request):
 
   learningSpaces = LearningSpace.objects.all()
 
-  # TODO: Dummy value until authenticated is implemented.
   user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
 
   context = {
     'learning_spaces' : learningSpaces,
-    'user_authenticated': user_authenticated
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
   }
 
   return render(request, 'explore/explore.html', context)
@@ -93,12 +106,16 @@ def sign_up_view(request):
   signUpForm = SignUpForm(request.POST or None)
   if signUpForm.is_valid():
     username = signUpForm.cleaned_data.get('username')
+    first_name = signUpForm.cleaned_data.get('first_name')
+    last_name = signUpForm.cleaned_data.get('last_name')
     email = signUpForm.cleaned_data.get('email')
     password = signUpForm.cleaned_data.get('password')
     confirm_password = signUpForm.cleaned_data.get('confirm_password') 
     try: 
       user = User.objects.create_user(username, email, password)
-      print(user)
+      user.first_name = first_name
+      user.last_name = last_name
+      user.save()
     except:
       user = None
     if user != None:
@@ -144,9 +161,8 @@ def profile_view(request, user_id):
 
   return render(request, 'profile/profile.html', context)
 
+@login_required
 def profile_edit_view(request, user_id):
-
-  # TODO: Implement authentication.
 
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
@@ -165,12 +181,14 @@ def profile_edit_view(request, user_id):
 
 # Quizzes views.
 
+@login_required
 def quiz_view(request, learning_space_id, quiz_id):
 
     context = {}
 
     return render(request, 'quiz/quiz.html', context)
 
+@login_required
 def quiz_create_view(request, learning_space_id):
 
     context = {}
@@ -179,12 +197,14 @@ def quiz_create_view(request, learning_space_id):
 
 # Questions views.
 
+@login_required
 def question_view(request, learning_space_id, question_id):
 
     context = {}
 
     return render(request, 'question/question.html', context)
 
+@login_required
 def question_create_view(request, learning_space_id):
 
     context = {}
