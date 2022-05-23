@@ -171,6 +171,17 @@ def profile_edit_view(request, user_id):
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
 
+  userProfileForm = UserProfileForm(request.POST or None)
+
+  if userProfileForm.is_valid():
+    coLearnUser.bio = userProfileForm.cleaned_data.get('bio')
+    coLearnUser.background = userProfileForm.cleaned_data.get('background')
+    coLearnUser.interests = userProfileForm.cleaned_data.get('interests')
+
+    coLearnUser.save()
+    
+    return redirect('/user/%d' % user_id )
+
   context = {
     'first_name' : coLearnUser.user.first_name,
     'last_name' : coLearnUser.user.last_name,
@@ -178,7 +189,8 @@ def profile_edit_view(request, user_id):
     'background': coLearnUser.background,
     'interests': coLearnUser.interests,
     'user_id': coLearnUser.id,
-    'learning_spaces': learningSpaces
+    'learning_spaces': learningSpaces,
+    'profile_picture': coLearnUser.profile_picture
   }
 
   return render(request, 'profile/profile_edit.html', context)
