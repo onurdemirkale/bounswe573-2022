@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # variables to ensure that is not turned on during production.
 # Environment variables come as a string, it is converted here to 
 # integer first then a bool. Default value is 0.
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 # ALLOWED_HOSTS is a security feature of Django to prevent HTTP Host 
 # header attacks. The ALLOWED_HOSTS represent the host/domain names
@@ -123,6 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL='/signin'
+LOGIN_REDIRECT_URL='/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
