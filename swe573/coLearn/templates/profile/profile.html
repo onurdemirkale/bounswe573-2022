@@ -51,6 +51,25 @@
 									<h4>{{first_name}} {{last_name}}</h4>
 								</div>
 							</div>
+							<form method="POST" action="." enctype="multipart/form-data">
+								{% csrf_token %}
+								<div class="form-group">
+									<div class="custom-file">
+										<input
+											type="file"
+											name="profile_picture_upload"
+											oninput="submit()"
+											accept="image/png, image/gif, image/jpeg"
+											class="custom-file-input"
+											required
+										/>
+										<label class="custom-file-label"
+											>Select Profile Picture...</label
+										>
+										<div class="invalid-feedback">Invalid thumbnail.</div>
+									</div>
+								</div>
+							</form>
 							<div class="text-center">
 								<a
 									class="btn btn-md btn-outline-secondary"
