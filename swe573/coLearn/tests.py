@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from coLearn.models import CoLearnUser
+from django.conf import settings
 
 User = get_user_model()
 
@@ -54,3 +55,14 @@ class UserTestCase(TestCase):
     self.assertEqual(self.coLearnUser_t.background, self.background)
     self.assertEqual(self.coLearnUser_t.bio, self.bio)
     self.assertEqual(self.coLearnUser_t.interests, self.interests)
+
+  # Ensure that a user can successfully sign in and is redirected correctly.
+  def test_sign_in_url(self):
+    sign_in_url=settings.LOGIN_URL
+    data = {'username': self.username, 'password': self.user_password}
+    response=self.client.post(sign_in_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(redirect_path, settings.LOGIN_REDIRECT_URL)
+    self.assertEqual(status_code, 200)
+    
