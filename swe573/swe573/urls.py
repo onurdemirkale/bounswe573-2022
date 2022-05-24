@@ -32,6 +32,7 @@ from coLearn.views import (
 )
 
 urlpatterns = [
+    path('', explore_view, name='explore'),
     path('explore/', explore_view, name='explore'),
     path('signup/', sign_up_view, name='sign-up'),
     path('signin/', sign_in_view, name='sign-in'),
