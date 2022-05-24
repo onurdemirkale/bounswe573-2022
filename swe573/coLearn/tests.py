@@ -44,4 +44,8 @@ class UserTestCase(TestCase):
   def test_user_password(self):
     self.assertTrue(self.user_t.check_password(self.user_password))
 
+  # Ensure that the receiver is used correctly to create a coLearnUser.
+  def test_coLearnUser_exists(self):
+    coLearnUser_count = CoLearnUser.objects.all().count()
+    self.assertEqual(coLearnUser_count, 1)
   
