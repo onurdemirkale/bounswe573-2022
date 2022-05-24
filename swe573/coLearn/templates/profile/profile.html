@@ -32,17 +32,44 @@
 					<div>
 						<aside class="col-md-12">
 							<div class="card mb-4 box-shadow">
+								{% if profile_picture %}
 								<img
 									class="card-img-top"
 									style="max-width: 400px; width: 100%"
 									src="{{profile_picture.url}}"
 									alt="Profile Picture"
-									onerror="this.onerror=null;this.src='https:\/\/swe573.s3.eu-central-1.amazonaws.com/blank-profile-picture.png';"
 								/>
+								{% else %}
+								<img
+									class="card-img-top"
+									style="max-width: 400px; width: 100%"
+									src="https:\/\/swe573.s3.eu-central-1.amazonaws.com/blank-profile-picture.png"
+									alt="Profile Picture"
+								/>
+								{% endif %}
 								<div class="card-body">
 									<h4>{{first_name}} {{last_name}}</h4>
 								</div>
 							</div>
+							<form method="POST" action="." enctype="multipart/form-data">
+								{% csrf_token %}
+								<div class="form-group">
+									<div class="custom-file">
+										<input
+											type="file"
+											name="profile_picture_upload"
+											oninput="submit()"
+											accept="image/png, image/gif, image/jpeg"
+											class="custom-file-input"
+											required
+										/>
+										<label class="custom-file-label"
+											>Select Profile Picture...</label
+										>
+										<div class="invalid-feedback">Invalid thumbnail.</div>
+									</div>
+								</div>
+							</form>
 							<div class="text-center">
 								<a
 									class="btn btn-md btn-outline-secondary"

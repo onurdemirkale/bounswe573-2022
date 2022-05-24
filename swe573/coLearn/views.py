@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
-from .models import LearningSpace, CoLearnUser
-from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm
+from .models import LearningSpace, CoLearnUser, Question, Answer
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm, AnswerForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 
@@ -133,7 +133,7 @@ def sign_in_view(request):
     user = authenticate(request, username=username, password=password)
     if user != None:
       login(request, user)
-      return redirect('/explore')
+      return redirect('/explore/')
     else:
       request.session['authentication_failed'] = 1
   return render(request, 'signIn/sign_in.html', {'form':signInForm})
@@ -145,9 +145,13 @@ def logout_view(request):
 # User Profile view.
 
 def profile_view(request, user_id):
-
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+
+  profilePictureForm = ProfilePictureForm(request.POST,request.FILES or None)
+  if profilePictureForm.is_valid():
+    coLearnUser.profile_picture = profilePictureForm.cleaned_data.get('profile_picture_upload')
+    coLearnUser.save()    
 
   context = {
     'first_name' : coLearnUser.user.first_name,
@@ -156,16 +160,27 @@ def profile_view(request, user_id):
     'background': coLearnUser.background,
     'interests': coLearnUser.interests,
     'user_id': coLearnUser.id,
-    'learning_spaces': learningSpaces
+    'learning_spaces': learningSpaces,
+    'profile_picture': coLearnUser.profile_picture
   }
 
   return render(request, 'profile/profile.html', context)
 
 @login_required
 def profile_edit_view(request, user_id):
-
   coLearnUser = CoLearnUser.objects.get(pk=user_id)
   learningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+
+  userProfileForm = UserProfileForm(request.POST or None)
+
+  if userProfileForm.is_valid():
+    coLearnUser.bio = userProfileForm.cleaned_data.get('bio')
+    coLearnUser.background = userProfileForm.cleaned_data.get('background')
+    coLearnUser.interests = userProfileForm.cleaned_data.get('interests')
+
+    coLearnUser.save()
+    
+    return redirect('/user/%d' % user_id )
 
   context = {
     'first_name' : coLearnUser.user.first_name,
@@ -174,7 +189,8 @@ def profile_edit_view(request, user_id):
     'background': coLearnUser.background,
     'interests': coLearnUser.interests,
     'user_id': coLearnUser.id,
-    'learning_spaces': learningSpaces
+    'learning_spaces': learningSpaces,
+    'profile_picture': coLearnUser.profile_picture
   }
 
   return render(request, 'profile/profile_edit.html', context)
@@ -199,10 +215,25 @@ def quiz_create_view(request, learning_space_id):
 
 @login_required
 def question_view(request, learning_space_id, question_id):
+  question = Question.objects.get(pk=question_id)
+  answers = question.answers.all()
 
-    context = {}
+  answerForm = AnswerForm(request.POST or None)
+  if(answerForm.is_valid()):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    answer = Answer.objects.create(sender=coLearnUser, content=answerForm.cleaned_data.get('content'))
+    question.answers.add(answer)
 
-    return render(request, 'question/question.html', context)
+    return redirect('/learningspace/%d/question/%d' % (learning_space_id,question_id))
+  
+  context = {
+    'learning_space_id': learning_space_id,
+    'question_id': question_id,
+    'question': question,
+    'answers': answers
+  }
+
+  return render(request, 'question/question.html', context)
 
 @login_required
 def question_create_view(request, learning_space_id):

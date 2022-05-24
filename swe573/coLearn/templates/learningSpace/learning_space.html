@@ -86,7 +86,7 @@
 								{% if user_authenticated %}
 								<a
 									class="btn btn-sm btn-outline-secondary"
-									href="/learningspace/{{lid}}/create/question"
+									href="/learningspace/{{id}}/create/question"
 									>Create Question</a
 								>
 								{% endif %}
@@ -99,9 +99,11 @@
 									>
 										<div>
 											<h6 class="my-0">
-												<a href="#">{{q.questions_title}}</a>
+												<a href="question/{{q.id}}">{{q.question_title}}</a>
 											</h6>
-											<small class="text-muted">Posted by: {{q.author}}</small>
+											<small class="text-muted"
+												>Posted by: {{q.author.user.username}}</small
+											>
 										</div>
 										<span class="text-muted">Created: {{q.date_created}}</span>
 									</li>
@@ -132,7 +134,9 @@
 									>
 										<div>
 											<h6 class="my-0"><a href="#">{{q.topic_title}}</a></h6>
-											<small class="text-muted">Posted by: {{q.author}}</small>
+											<small class="text-muted"
+												>Posted by: {{q.author.user.username}}</small
+											>
 										</div>
 										<span class="text-muted">Created: {{q.date_created}}</span>
 									</li>
