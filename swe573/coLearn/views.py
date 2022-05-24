@@ -133,7 +133,7 @@ def sign_in_view(request):
     user = authenticate(request, username=username, password=password)
     if user != None:
       login(request, user)
-      return redirect('/explore')
+      return redirect('/explore/')
     else:
       request.session['authentication_failed'] = 1
   return render(request, 'signIn/sign_in.html', {'form':signInForm})
