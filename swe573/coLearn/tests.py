@@ -49,3 +49,8 @@ class UserTestCase(TestCase):
     coLearnUser_count = CoLearnUser.objects.all().count()
     self.assertEqual(coLearnUser_count, 1)
   
+  # Ensure that the coLearnUser stores information correctly.
+  def test_coLearnUser_information_valid(self):
+    self.assertEqual(self.coLearnUser_t.background, self.background)
+    self.assertEqual(self.coLearnUser_t.bio, self.bio)
+    self.assertEqual(self.coLearnUser_t.interests, self.interests)
