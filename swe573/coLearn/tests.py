@@ -40,4 +40,8 @@ class UserTestCase(TestCase):
     user_count = User.objects.all().count()
     self.assertEqual(user_count, 1)
 
+  # Ensure that the user password is set correctly.
+  def test_user_password(self):
+    self.assertTrue(self.user_t.check_password(self.user_password))
+
   
