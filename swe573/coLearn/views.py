@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
-from .models import LearningSpace, CoLearnUser
-from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm
+from .models import LearningSpace, CoLearnUser, Question, Answer
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm, AnswerForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 
@@ -215,10 +215,25 @@ def quiz_create_view(request, learning_space_id):
 
 @login_required
 def question_view(request, learning_space_id, question_id):
+  question = Question.objects.get(pk=question_id)
+  answers = question.answers.all()
 
-    context = {}
+  answerForm = AnswerForm(request.POST or None)
+  if(answerForm.is_valid()):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    answer = Answer.objects.create(sender=coLearnUser, content=answerForm.cleaned_data.get('content'))
+    question.answers.add(answer)
 
-    return render(request, 'question/question.html', context)
+    return redirect('/learningspace/%d/question/%d' % (learning_space_id,question_id))
+  
+  context = {
+    'learning_space_id': learning_space_id,
+    'question_id': question_id,
+    'question': question,
+    'answers': answers
+  }
+
+  return render(request, 'question/question.html', context)
 
 @login_required
 def question_create_view(request, learning_space_id):
