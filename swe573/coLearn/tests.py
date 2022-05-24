@@ -35,5 +35,9 @@ class UserTestCase(TestCase):
     coLearnUser_t.save()
     self.coLearnUser_t = coLearnUser_t
 
+  # Ensure that the user exists.
+  def test_user_exists(self):
+    user_count = User.objects.all().count()
+    self.assertEqual(user_count, 1)
 
   
