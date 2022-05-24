@@ -57,3 +57,6 @@ class UserProfileForm(forms.Form):
 
 class ProfilePictureForm(forms.Form):
   profile_picture_upload = forms.FileField() 
+
+class AnswerForm(forms.Form):
+  content = forms.CharField(max_length=500)
