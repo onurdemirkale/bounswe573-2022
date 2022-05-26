@@ -248,6 +248,13 @@ def question_create_view(request, learning_space_id):
     learningSpace.save()
   
     return redirect('/learningspace/%d/question/%d' % (learning_space_id,question.id))
+  user_authenticated = False
+  
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
 
-  context = {'learning_space_id': learning_space_id}
+  context = {'learning_space_id': learning_space_id, 'user_authenticated': user_authenticated, 'user_id': user_id}
   return render(request, 'question/question_create.html', context)
