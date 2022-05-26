@@ -88,3 +88,14 @@ class UserTestCase(TestCase):
     redirect_path = response.request.get('PATH_INFO')
     self.assertEqual(redirect_path, '/explore/')
     self.assertEqual(status_code, 200)
+
+# Ensure that a user can successfully edit its profile.
+  def test_edit_profile(self):
+    self.client.force_login(self.user_t)
+    edit_profile_url='/user/%d/edit' % self.user_t.id
+    data = {'bio': self.coLearnUser_t.bio, 'background': self.coLearnUser_t.background, 'interests': self.coLearnUser_t.interests}
+    response = self.client.post(edit_profile_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(redirect_path, '/user/%d/' % self.user_t.id)
+    self.assertEqual(status_code, 200)
