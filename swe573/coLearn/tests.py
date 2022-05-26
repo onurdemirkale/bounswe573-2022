@@ -171,3 +171,18 @@ class LearningSpaceTestCase(TestCase):
     learning_space_id = created_learning_space.id
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, '/learningspace/%d/' % learning_space_id)
+
+  # Ensure that a user can edit a learning space through views.
+  def test_edit_learning_space(self):
+    self.client.force_login(self.user_t)
+    learning_space_id = self.learning_space_t.id
+    edit_learning_space_url = '/learningspace/%d/edit/' % learning_space_id
+    data = {'overview': 'Modified overview for testing.',
+            'title': 'Modified Title',
+            'prerequisites': ['Modified prerequisite 1', 'Modified prerequisite 2'],
+            'keywords': ['Modified keyword 1', 'Modified keyword 2']}
+    response = self.client.post(edit_learning_space_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, '/learningspace/%d/' % learning_space_id)
