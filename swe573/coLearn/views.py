@@ -27,6 +27,18 @@ def learning_space_view(request, learning_space_id):
   user_authenticated = False
   
   user_id = None
+
+  # If there is a POST request, subsribe/unsubscribe the user.
+  if(request.POST):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    if user_subscribed:
+      learningSpace.subscribers.remove(coLearnUser)
+      learningSpace.save()
+    else:
+      learningSpace.subscribers.add(coLearnUser)
+      learningSpace.save()
+
+    return redirect('/learningspace/%d' % learning_space_id )
   
   if request.user.is_authenticated:
     user_authenticated = True
@@ -47,15 +59,6 @@ def learning_space_view(request, learning_space_id):
     'user_id': user_id,
     'user_subscribed': user_subscribed
   }
-
-  if(request.POST):
-    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
-    if user_subscribed:
-      learningSpace.subscribers.remove(coLearnUser)
-    else:
-      learningSpace.subscribers.add(coLearnUser)
-
-    return render(request, 'learningSpace/learning_space.html', context)
 
   return render(request, 'learningSpace/learning_space.html', context)
 
@@ -132,7 +135,7 @@ def explore_view(request):
 def my_learning_spaces_view(request):
   coLearnUser = CoLearnUser.objects.get(id=request.user.id)
   myLearningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
-  
+
   user_authenticated = False
   user_id = None
   
