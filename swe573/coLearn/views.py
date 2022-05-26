@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from .models import LearningSpace, CoLearnUser, Question, Answer
-from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm, AnswerForm
+from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm, AnswerForm, QuestionForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 
@@ -237,7 +237,17 @@ def question_view(request, learning_space_id, question_id):
 
 @login_required
 def question_create_view(request, learning_space_id):
+  questionForm = QuestionForm(request.POST or None)
+  if(questionForm.is_valid()):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    question = Question.objects.create(author = coLearnUser, 
+                                     question_title=questionForm.cleaned_data.get('question_title'), 
+                                     question_content=questionForm.cleaned_data.get('question_content'))
+    learningSpace = LearningSpace.objects.get(pk=learning_space_id)
+    learningSpace.questions.add(question)
+    learningSpace.save()
+  
+    return redirect('/learningspace/%d/question/%d' % (learning_space_id,question.id))
 
-    context = {}
-
-    return render(request, 'question/question_create.html', context)
+  context = {'learning_space_id': learning_space_id}
+  return render(request, 'question/question_create.html', context)
