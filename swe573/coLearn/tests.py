@@ -150,6 +150,19 @@ class LearningSpaceTestCase(TestCase):
     learning_space_t.save()
     self.learning_space_t = learning_space_t
 
+    # Set up question variables.
+    self.answer_content = 'This is a test answer.'
+    self.question_title = 'test title 1'
+    self.question_content = 'test content 1'
+    
+    # Set up a question inside the learning space with the test user.
+    coLearnUser_t = CoLearnUser.objects.get(id=user_t.id)
+    question_t = Question.objects.create(question_title=self.question_title, 
+                                       question_content=self.question_content, 
+                                       author=coLearnUser_t)
+    learning_space_t.questions.add(question_t)
+    self.question_t = question_t
+
   # Ensure that the learning space exists.
   def test_learning_space_exists(self):
     learning_space_count = LearningSpace.objects.all().count()
@@ -202,6 +215,21 @@ class LearningSpaceTestCase(TestCase):
     question_id = created_question.id
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, '/learningspace/%d/question/%d' % (learning_space_id, question_id))
+
+  # Ensure that a user can send an answer to a created question.
+  def test_create_answer(self):
+    self.client.force_login(self.user_t)
+    learning_space_id = self.learning_space_t.id
+    question_id = self.question_t.id
+    create_answer_url = '/learningspace/%d/question/%d' % (learning_space_id, question_id)
+    data = {'content': self.answer_content}
+    response = self.client.post(create_answer_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, create_answer_url)
+
+
 
 
   
