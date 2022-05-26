@@ -27,7 +27,6 @@ def learning_space_view(request, learning_space_id):
     user_authenticated = True
     user_id = request.user.id
 
-
   relatedSpaces = LearningSpace.objects.filter(keywords=learningSpace.keywords)
 
   context = {
@@ -54,7 +53,13 @@ def learning_space_create_view(request):
       if(space_created):
         return redirect('/learningspace/%d' % space_created.id )
   else:
-    context = {}
+    user_id = None
+  
+    if request.user.is_authenticated:
+      user_authenticated = True
+      user_id = request.user.id
+
+    context = {'user_authenticated': user_authenticated, 'user_id': user_id}
     return render(request, 'learningSpace/learning_space_create.html', context)
 
 @login_required
@@ -67,12 +72,21 @@ def learning_space_edit_view(request , learning_space_id):
       if(result):
         return redirect('/learningspace/%d' % learning_space_id )
 
+  user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
   context = {
     'title' : learningSpace.title,
     'overview' : learningSpace.overview,
     'prerequisites' : learningSpace.prerequisites,
     'keywords': learningSpace.keywords,
-    'id': learningSpace.id
+    'id': learningSpace.id,
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
   }
 
   return render(request, 'learningSpace/learning_space_edit.html', context)
@@ -151,7 +165,12 @@ def profile_view(request, user_id):
   profilePictureForm = ProfilePictureForm(request.POST,request.FILES or None)
   if profilePictureForm.is_valid():
     coLearnUser.profile_picture = profilePictureForm.cleaned_data.get('profile_picture_upload')
-    coLearnUser.save()    
+    coLearnUser.save()
+
+  profile_owner = False
+
+  if user_id == request.user.id:
+    profile_owner = True
 
   context = {
     'first_name' : coLearnUser.user.first_name,
@@ -159,9 +178,11 @@ def profile_view(request, user_id):
     'bio' : coLearnUser.bio,
     'background': coLearnUser.background,
     'interests': coLearnUser.interests,
-    'user_id': coLearnUser.id,
+    'user_profile_id': coLearnUser.id,
+    'user_id': request.user.id,
     'learning_spaces': learningSpaces,
-    'profile_picture': coLearnUser.profile_picture
+    'profile_picture': coLearnUser.profile_picture,
+    'profile_owner': profile_owner
   }
 
   return render(request, 'profile/profile.html', context)
@@ -248,6 +269,13 @@ def question_create_view(request, learning_space_id):
     learningSpace.save()
   
     return redirect('/learningspace/%d/question/%d' % (learning_space_id,question.id))
+  user_authenticated = False
+  
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
 
-  context = {'learning_space_id': learning_space_id}
+  context = {'learning_space_id': learning_space_id, 'user_authenticated': user_authenticated, 'user_id': user_id}
   return render(request, 'question/question_create.html', context)
