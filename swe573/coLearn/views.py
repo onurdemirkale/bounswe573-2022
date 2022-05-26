@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 # Learning Space views.
 
 def learning_space_view(request, learning_space_id):
-
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
 
   # Obtain quizzes and questions.
@@ -19,9 +18,27 @@ def learning_space_view(request, learning_space_id):
   # Obtain the subscribers using the LearningSpace model.
   subscribers = learningSpace.subscribers.all()
 
+  user_subscribed = False
+
+  for s in subscribers:
+    if s.user.id == request.user.id:
+      user_subscribed = True
+
   user_authenticated = False
   
   user_id = None
+
+  # If there is a POST request, subsribe/unsubscribe the user.
+  if(request.POST):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    if user_subscribed:
+      learningSpace.subscribers.remove(coLearnUser)
+      learningSpace.save()
+    else:
+      learningSpace.subscribers.add(coLearnUser)
+      learningSpace.save()
+
+    return redirect('/learningspace/%d' % learning_space_id )
   
   if request.user.is_authenticated:
     user_authenticated = True
@@ -39,7 +56,8 @@ def learning_space_view(request, learning_space_id):
     'subscribers': subscribers,
     'related_spaces': relatedSpaces,
     'user_authenticated': user_authenticated,
-    'user_id': user_id
+    'user_id': user_id,
+    'user_subscribed': user_subscribed
   }
 
   return render(request, 'learningSpace/learning_space.html', context)
@@ -111,6 +129,28 @@ def explore_view(request):
   }
 
   return render(request, 'explore/explore.html', context)
+
+# MyLearningSpaces views.
+
+def my_learning_spaces_view(request):
+  coLearnUser = CoLearnUser.objects.get(id=request.user.id)
+  myLearningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+
+  user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
+  context = {
+    'my_learning_spaces' : myLearningSpaces,
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
+  }
+
+  return render(request, 'myLearningSpaces/myLearningSpaces.html', context)
+
 
 # Authentication views.
 

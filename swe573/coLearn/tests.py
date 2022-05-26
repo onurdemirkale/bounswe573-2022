@@ -229,7 +229,43 @@ class LearningSpaceTestCase(TestCase):
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, create_answer_url)
 
+class MyLearningSpaces(TestCase):
 
+  def setUp(self):
+    # Set user variables.
+    self.username='unit'
+    self.email='unit@test.com'
+    self.user_password='test_1234!'
 
+    # Set learning space variables.
+    self.thumbnail = SimpleUploadedFile("t.jpeg", b"file_content", content_type="image/jpeg")
+    self.overview = 'Test overview.'
+    self.prerequisites = ['Prer^e7&qui$site test 1\\a', '\%-/Prerequisite test 2']
+    self.title = 'Test Title'
+    self.keywords = ['Test 1', 'Test 2']
 
-  
+    # Create a User and set username, email and password.
+    user_t = User(username=self.username, email=self.email)
+    user_t.set_password(self.user_password)
+    user_t.save()
+    self.user_t = user_t
+
+    # Create a LearningSpace and set its fields.
+    learning_space_t = LearningSpace(thumbnail=self.thumbnail,
+                                     overview=self.overview, 
+                                     prerequisites=self.prerequisites,
+                                     title=self.title,
+                                     keywords=self.keywords)
+    learning_space_t.save()
+    self.learning_space_t = learning_space_t
+
+  # Ensure that subscribe functionality works correctly through views.
+  def test_user_subscribe(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/learningspace/%d/' % self.learning_space_t.id
+    response = self.client.post(subscribe_learning_space_url, {}, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    coLearnUser = CoLearnUser.objects.get(id=self.user_t.id)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
