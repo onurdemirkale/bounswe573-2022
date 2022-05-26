@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 # Learning Space views.
 
 def learning_space_view(request, learning_space_id):
-
   learningSpace = LearningSpace.objects.get(pk=learning_space_id)
 
   # Obtain quizzes and questions.
@@ -18,6 +17,12 @@ def learning_space_view(request, learning_space_id):
 
   # Obtain the subscribers using the LearningSpace model.
   subscribers = learningSpace.subscribers.all()
+
+  user_subscribed = False
+
+  for s in subscribers:
+    if s.user.id == request.user.id:
+      user_subscribed = True
 
   user_authenticated = False
   
@@ -39,8 +44,18 @@ def learning_space_view(request, learning_space_id):
     'subscribers': subscribers,
     'related_spaces': relatedSpaces,
     'user_authenticated': user_authenticated,
-    'user_id': user_id
+    'user_id': user_id,
+    'user_subscribed': user_subscribed
   }
+
+  if(request.POST):
+    coLearnUser = CoLearnUser.objects.get(pk=request.user.id)
+    if user_subscribed:
+      learningSpace.subscribers.remove(coLearnUser)
+    else:
+      learningSpace.subscribers.add(coLearnUser)
+
+    return render(request, 'learningSpace/learning_space.html', context)
 
   return render(request, 'learningSpace/learning_space.html', context)
 
