@@ -142,3 +142,11 @@ class LearningSpaceTestCase(TestCase):
                                      keywords=self.keywords)
     learning_space_t.save()
     self.learning_space_t = learning_space_t
+
+  # Ensure that the learning space exists.
+  def test_learning_space_exists(self):
+    learning_space_count = LearningSpace.objects.all().count()
+    self.assertEqual(learning_space_count, 1)
+
+
+  
