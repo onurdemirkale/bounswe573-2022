@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from coLearn.models import CoLearnUser
+from coLearn.models import CoLearnUser, LearningSpace
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -112,4 +112,33 @@ class UserTestCase(TestCase):
     redirect_path = response.request.get('PATH_INFO')
     self.assertEqual(redirect_path, '/user/%d/' % self.user_t.id)
     self.assertEqual(status_code, 200)
-  
+
+class LearningSpaceTestCase(TestCase):
+
+  def setUp(self):
+    # Set user variables.
+    self.username='unit'
+    self.email='unit@test.com'
+    self.user_password='test_1234!'
+
+    # Set learning space variables.
+    self.thumbnail = SimpleUploadedFile("t.jpeg", b"file_content", content_type="image/jpeg")
+    self.overview = 'Test overview.'
+    self.prerequisites = ['Prer^e7&qui$site test 1\\a', '\%-/Prerequisite test 2']
+    self.title = 'Test Title'
+    self.keywords = ['Test 1', 'Test 2']
+
+    # Create a User and set username, email and password.
+    user_t = User(username=self.username, email=self.email)
+    user_t.set_password(self.user_password)
+    user_t.save()
+    self.user_t = user_t
+
+    # Create a LearningSpace and set its fields.
+    learning_space_t = LearningSpace(thumbnail=self.thumbnail,
+                                     overview=self.overview, 
+                                     prerequisites=self.prerequisites,
+                                     title=self.title,
+                                     keywords=self.keywords)
+    learning_space_t.save()
+    self.learning_space_t = learning_space_t
