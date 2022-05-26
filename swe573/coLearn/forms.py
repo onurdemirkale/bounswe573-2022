@@ -60,3 +60,7 @@ class ProfilePictureForm(forms.Form):
 
 class AnswerForm(forms.Form):
   content = forms.CharField(max_length=500)
+
+class QuestionForm(forms.Form):
+  question_title = forms.CharField(max_length=100)
+  question_content = forms.CharField(max_length=500)
