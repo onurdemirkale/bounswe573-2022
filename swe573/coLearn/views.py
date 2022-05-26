@@ -120,7 +120,7 @@ def sign_up_view(request):
       user = None
     if user != None:
       login(request, user)
-      return redirect('/explore')
+      return redirect('/explore/')
     else:
       request.session['sign_up_failed'] = 1
   return render(request, 'signUp/sign_up.html', {'form':signUpForm})
@@ -140,7 +140,7 @@ def sign_in_view(request):
 
 def logout_view(request):
   logout(request)
-  return redirect('/explore')
+  return redirect('/explore/')
 
 # User Profile view.
 
