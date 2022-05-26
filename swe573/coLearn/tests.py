@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from coLearn.models import CoLearnUser, LearningSpace
+from coLearn.models import CoLearnUser, LearningSpace, Question
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -186,3 +186,22 @@ class LearningSpaceTestCase(TestCase):
     redirect_path = response.request.get('PATH_INFO')
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, '/learningspace/%d/' % learning_space_id)
+
+  # Ensure that a user can create a question inside a learning space.
+  def test_create_question(self):
+    question_title = 'Test question title'
+    question_content = 'Test question content'
+    self.client.force_login(self.user_t)
+    learning_space_id = self.learning_space_t.id
+    create_question_url = '/learningspace/%d/question/create' % learning_space_id
+    data = {'question_title': question_title, 'question_content': question_content}
+    response = self.client.post(create_question_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    created_question = Question.objects.get(question_title=question_title)
+    question_id = created_question.id
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, '/learningspace/%d/question/%d' % (learning_space_id, question_id))
+
+
+  
