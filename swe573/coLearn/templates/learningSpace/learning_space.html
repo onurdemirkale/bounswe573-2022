@@ -45,13 +45,43 @@
 								class="card-header d-flex justify-content-between align-items-center"
 							>
 								<h4 class="my-0 font-weight-normal">Overview</h4>
-								{% if user_authenticated %}
-								<button
-									type="button"
-									class="btn btn-md ml-auto btn-outline-success"
-								>
-									Subscribe
-								</button>
+								{% if user_authenticated %} {% if user_subscribed %}
+								<div class="ml-auto">
+									<form
+										id="subscribe-form"
+										method="POST"
+										action="."
+										enctype="multipart/form-data"
+									>
+										{% csrf_token %}
+										<button
+											form="subscribe-form"
+											type="submit"
+											class="btn btn-md ml-auto btn-success"
+										>
+											Subscribed
+										</button>
+									</form>
+								</div>
+								{% else %}
+								<div class="ml-auto">
+									<form
+										id="subscribe-form"
+										method="POST"
+										action="."
+										enctype="multipart/form-data"
+									>
+										{% csrf_token %}
+										<button
+											form="subscribe-form"
+											type="submit"
+											class="btn btn-md ml-auto btn-outline-success"
+										>
+											Subscribed
+										</button>
+									</form>
+								</div>
+								{% endif %}
 								<br />&nbsp&nbsp<br />
 								<a
 									class="btn btn-md btn-outline-primary"
