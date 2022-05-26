@@ -128,6 +128,13 @@ class LearningSpaceTestCase(TestCase):
     self.title = 'Test Title'
     self.keywords = ['Test 1', 'Test 2']
 
+    # Set up secondary learning space variables.
+    self.test_thumbnail = SimpleUploadedFile("t2.jpeg", b"file_content", content_type="image/jpeg")
+    self.test_overview = 'Test 2 overview.'
+    self.test_prerequisites = ['Prer^e7&qui$site test 3\\a', '\%-/Prerequisite test 4']
+    self.test_title = 'Test 2 Title'
+    self.test_keywords = ['Test 2', 'Test 3']
+
     # Create a User and set username, email and password.
     user_t = User(username=self.username, email=self.email)
     user_t.set_password(self.user_password)
@@ -148,5 +155,19 @@ class LearningSpaceTestCase(TestCase):
     learning_space_count = LearningSpace.objects.all().count()
     self.assertEqual(learning_space_count, 1)
 
-
-  
+  # Ensure that a user can create a learning space through views.
+  def test_create_learning_space(self):
+    self.client.force_login(self.user_t)
+    create_learning_space_url = '/learningspace/create/'
+    data = {'thumbnail': self.test_thumbnail, 
+            'keywords': self.test_keywords, 
+            'prerequisites': self.test_prerequisites,
+            'title': self.test_title,
+            'overview': self.test_overview}
+    response = self.client.post(create_learning_space_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    created_learning_space = LearningSpace.objects.get(title=self.test_title)
+    learning_space_id = created_learning_space.id
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, '/learningspace/%d/' % learning_space_id)
