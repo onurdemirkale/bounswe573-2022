@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from coLearn.models import CoLearnUser
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 User = get_user_model()
 
@@ -89,7 +90,7 @@ class UserTestCase(TestCase):
     self.assertEqual(redirect_path, '/explore/')
     self.assertEqual(status_code, 200)
 
-# Ensure that a user can successfully edit its profile.
+  # Ensure that a user can successfully edit its profile.
   def test_edit_profile(self):
     self.client.force_login(self.user_t)
     edit_profile_url='/user/%d/edit' % self.user_t.id
@@ -99,3 +100,16 @@ class UserTestCase(TestCase):
     redirect_path = response.request.get('PATH_INFO')
     self.assertEqual(redirect_path, '/user/%d/' % self.user_t.id)
     self.assertEqual(status_code, 200)
+
+  # Ensure that a user can upload a profile picture.
+  def test_upload_profile_picture(self):
+    self.client.force_login(self.user_t)
+    profile_url = '/user/%d' % self.user_t.id
+    profile_picture = SimpleUploadedFile("pp.jpeg", b"file_content", content_type="image/jpeg")
+    data = {'profile_picture': profile_picture}
+    response = self.client.post(profile_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(redirect_path, '/user/%d/' % self.user_t.id)
+    self.assertEqual(status_code, 200)
+  
