@@ -72,12 +72,21 @@ def learning_space_edit_view(request , learning_space_id):
       if(result):
         return redirect('/learningspace/%d' % learning_space_id )
 
+  user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
   context = {
     'title' : learningSpace.title,
     'overview' : learningSpace.overview,
     'prerequisites' : learningSpace.prerequisites,
     'keywords': learningSpace.keywords,
-    'id': learningSpace.id
+    'id': learningSpace.id,
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
   }
 
   return render(request, 'learningSpace/learning_space_edit.html', context)
