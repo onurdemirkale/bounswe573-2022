@@ -127,6 +127,28 @@ def explore_view(request):
 
   return render(request, 'explore/explore.html', context)
 
+# MyLearningSpaces views.
+
+def my_learning_spaces_view(request):
+  coLearnUser = CoLearnUser.objects.get(id=request.user.id)
+  myLearningSpaces = LearningSpace.objects.filter(subscribers=coLearnUser)
+  
+  user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
+  context = {
+    'my_learning_spaces' : myLearningSpaces,
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
+  }
+
+  return render(request, 'myLearningSpaces/myLearningSpaces.html', context)
+
+
 # Authentication views.
 
 User = get_user_model()
