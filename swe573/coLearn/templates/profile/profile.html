@@ -51,6 +51,7 @@
 									<h4>{{first_name}} {{last_name}}</h4>
 								</div>
 							</div>
+							{% if profile_owner %}
 							<form method="POST" action="." enctype="multipart/form-data">
 								{% csrf_token %}
 								<div class="form-group">
@@ -77,6 +78,7 @@
 									>Edit</a
 								>
 							</div>
+							{% endif %}
 						</aside>
 					</div>
 				</div>
