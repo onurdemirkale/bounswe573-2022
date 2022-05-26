@@ -13,6 +13,13 @@ class UserTestCase(TestCase):
     self.email='unit@test.com'
     self.user_password='test_1234!'
 
+    # Set up second user variables for testing sign up url.
+    self.test_username = 'test'
+    self.test_email='test@test.com'
+    self.test_password='qwert_1234!'
+    self.test_first_name='jane'
+    self.test_last_name='doe'
+
     # Set coLearnUser variables.
     self.bio = 'Example bio. Born in 1996.'
     self.background = 'Example background. Interested in software engineering and unit tests.'
@@ -65,4 +72,19 @@ class UserTestCase(TestCase):
     redirect_path = response.request.get('PATH_INFO')
     self.assertEqual(redirect_path, settings.LOGIN_REDIRECT_URL)
     self.assertEqual(status_code, 200)
-    
+
+  # Ensure that a new user can sucessfully sign up and is redirected correctly.
+  def test_sign_up_url(self):
+    sign_up_url='/signup/'
+    data = {'username': self.test_username, 
+            'first_name': self.test_first_name,
+            'last_name': self.test_last_name,
+            'password': self.test_password,
+            'confirm_password': self.test_password,
+            'email': self.test_email}
+
+    response=self.client.post(sign_up_url, data, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    self.assertEqual(redirect_path, '/explore/')
+    self.assertEqual(status_code, 200)
