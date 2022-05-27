@@ -44,7 +44,7 @@ def learning_space_view(request, learning_space_id):
     user_authenticated = True
     user_id = request.user.id
 
-  relatedSpaces = LearningSpace.objects.filter(keywords=learningSpace.keywords)
+  relatedSpaces = LearningSpace.objects.filter(keywords__overlap=learningSpace.keywords)
 
   context = {
     'title' : learningSpace.title,
