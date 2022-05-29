@@ -5,6 +5,7 @@ from .models import LearningSpace, CoLearnUser, Question, Answer
 from .forms import LearningSpaceCreateForm, LearningSpaceEditForm, SignInForm, SignUpForm, UserProfileForm, ProfilePictureForm, AnswerForm, QuestionForm
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Learning Space views.
 
@@ -129,6 +130,29 @@ def explore_view(request):
   }
 
   return render(request, 'explore/explore.html', context)
+
+# Search views.
+
+def search_view(request):
+
+  query = request.GET.get("query")
+
+  learningSpacesQuery = LearningSpace.objects.filter(Q(keywords__icontains=query)| Q(overview__icontains=query) | Q(title__icontains=query))
+
+  user_authenticated = False
+  user_id = None
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+    user_id = request.user.id
+
+  context = {
+    'learning_spaces' : learningSpacesQuery,
+    'user_authenticated': user_authenticated,
+    'user_id': user_id
+  }
+
+  return render(request, 'search/search.html', context)
 
 # MyLearningSpaces views.
 
