@@ -299,3 +299,18 @@ class Search(TestCase):
                                      keywords=self.keywords)
     learning_space_t.save()
     self.learning_space_t = learning_space_t
+
+# Ensure that search view works correctly by querying a keyword.
+  def test_query_keyword(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/search/'
+    search_query = 'craft'
+    response = self.client.get(subscribe_learning_space_url, {'query':search_query }, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    learning_space=response.context['learning_spaces']
+    learning_space_count=learning_space.count()
+    self.assertEqual(learning_space_count, 1)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
+
