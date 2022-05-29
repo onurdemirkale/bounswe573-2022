@@ -314,3 +314,17 @@ class Search(TestCase):
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, subscribe_learning_space_url)
 
+  # Ensure that search view works correctly by querying a title.
+  def test_query_title(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/search/'
+    search_query = 'random'
+    response = self.client.get(subscribe_learning_space_url, {'query':search_query }, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    learning_space=response.context['learning_spaces']
+    learning_space_count=learning_space.count()
+    self.assertEqual(learning_space_count, 1)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
+
