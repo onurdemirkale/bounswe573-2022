@@ -12,8 +12,14 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="/user/{{user_id}}">Profile</a>
 			</li>
-			<form class="form-inline my-2 my-md-0">
-				<input class="form-control" type="text" placeholder="Search" />
+			<form method="GET" action="/search/" class="form-inline my-2 my-md-0">
+				{% csrf_token %}
+				<input
+					name="query"
+					class="form-control"
+					type="text"
+					placeholder="Search..."
+				/>
 			</form>
 			<li class="nav-item">
 				<a class="nav-link" href="/logout">Logout</a>

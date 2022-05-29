@@ -269,3 +269,75 @@ class MyLearningSpaces(TestCase):
     coLearnUser = CoLearnUser.objects.get(id=self.user_t.id)
     self.assertEqual(status_code, 200)
     self.assertEqual(redirect_path, subscribe_learning_space_url)
+
+class Search(TestCase):
+
+  def setUp(self):
+    # Set user variables.
+    self.username='unit'
+    self.email='unit@test.com'
+    self.user_password='test_1234!'
+
+    # Set learning space variables.
+    self.thumbnail = SimpleUploadedFile("t.jpeg", b"file_content", content_type="image/jpeg")
+    self.overview = 'A learning space for those who enjoy craft beer.'
+    self.prerequisites = ['Fermentation', 'Sanitization']
+    self.title = 'Random Title'
+    self.keywords = ['Beer', 'Craft']
+
+    # Create a User and set username, email and password.
+    user_t = User(username=self.username, email=self.email)
+    user_t.set_password(self.user_password)
+    user_t.save()
+    self.user_t = user_t
+
+    # Create a LearningSpace and set its fields.
+    learning_space_t = LearningSpace(thumbnail=self.thumbnail,
+                                     overview=self.overview, 
+                                     prerequisites=self.prerequisites,
+                                     title=self.title,
+                                     keywords=self.keywords)
+    learning_space_t.save()
+    self.learning_space_t = learning_space_t
+
+# Ensure that search view works correctly by querying a keyword.
+  def test_query_keyword(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/search/'
+    search_query = 'craft'
+    response = self.client.get(subscribe_learning_space_url, {'query':search_query }, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    learning_space=response.context['learning_spaces']
+    learning_space_count=learning_space.count()
+    self.assertEqual(learning_space_count, 1)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
+
+  # Ensure that search view works correctly by querying a title.
+  def test_query_title(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/search/'
+    search_query = 'random'
+    response = self.client.get(subscribe_learning_space_url, {'query':search_query }, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    learning_space=response.context['learning_spaces']
+    learning_space_count=learning_space.count()
+    self.assertEqual(learning_space_count, 1)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
+
+  # Ensure that search view works correctly by querying an overview.
+  def test_query_overview(self):
+    self.client.force_login(self.user_t)
+    subscribe_learning_space_url = '/search/'
+    search_query = 'enjoy'
+    response = self.client.get(subscribe_learning_space_url, {'query':search_query }, follow=True)
+    status_code = response.status_code
+    redirect_path = response.request.get('PATH_INFO')
+    learning_space=response.context['learning_spaces']
+    learning_space_count=learning_space.count()
+    self.assertEqual(learning_space_count, 1)
+    self.assertEqual(status_code, 200)
+    self.assertEqual(redirect_path, subscribe_learning_space_url)
