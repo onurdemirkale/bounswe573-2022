@@ -30,7 +30,8 @@ from coLearn.views import (
     logout_view,
     question_view,
     question_create_view,
-    my_learning_spaces_view
+    my_learning_spaces_view,
+    search_view
 )
 
 urlpatterns = [
@@ -47,6 +48,7 @@ urlpatterns = [
     path('learningspace/<int:learning_space_id>/question/<int:question_id>', question_view, name='question'),
     path('learningspace/<int:learning_space_id>/question/create', question_create_view, name='question-create'),
     path('mylearningspaces/', my_learning_spaces_view, name='my-learning-spaces'),
+    path('search/', search_view, name='search'),
     path('admin/', admin.site.urls),
 ]
 
