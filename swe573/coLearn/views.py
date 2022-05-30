@@ -231,6 +231,11 @@ def profile_view(request, user_id):
     coLearnUser.profile_picture = profilePictureForm.cleaned_data.get('profile_picture_upload')
     coLearnUser.save()
 
+  user_authenticated = False
+  
+  if request.user.is_authenticated:
+    user_authenticated = True
+
   profile_owner = False
 
   if user_id == request.user.id:
@@ -246,7 +251,8 @@ def profile_view(request, user_id):
     'user_id': request.user.id,
     'learning_spaces': learningSpaces,
     'profile_picture': coLearnUser.profile_picture,
-    'profile_owner': profile_owner
+    'profile_owner': profile_owner,
+    'user_authenticated': user_authenticated
   }
 
   return render(request, 'profile/profile.html', context)
