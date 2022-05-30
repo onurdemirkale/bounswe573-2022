@@ -24,7 +24,8 @@
 	</head>
 	<body>
 		<!-- Navbar -->
-		{%include 'navbar_auth.html'%}
+		{% if user_authenticated %} {%include 'navbar_auth.html'%} {% else %}
+		{%include 'navbar_unauth.html'%} {% endif %}
 		<!-- Navbar End -->
 		<main role="main" class="container py-5 bg-light">
 			<div class="row">
