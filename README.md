@@ -40,4 +40,4 @@ To run the Docker container, run the following commands:
 
 `docker build -t ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’ .`
 
-`docker run —env-file .env ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’
+`docker run —env-file .env ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’`
