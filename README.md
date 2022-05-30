@@ -24,11 +24,11 @@ Docker-Compose builds and starts a Docker image out of its current context and s
 
 During the development, it might be necessary to use the manage.py file to run various Django commands. To access the container while its running, run the following command:
 
-docker exec -it ‘CONTAINER-ID’ bash
+`docker exec -it ‘CONTAINER-ID’ bash`
 
 This command will start the bash inside the container and connect it to the standard input and output of the host operating system. The container ID can be obtained by running the following command:
 
-docker ps
+`docker ps`
 
 This command will list all running containers and allow the user to copy the container ID.
 
@@ -38,6 +38,6 @@ To run the Django application by building an image out of its current context us
 
 To run the Docker container, run the following commands:
 
-docker build -t ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’ .
+`docker build -t ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’ .`
 
-docker run —env-file .env ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’
+`docker run —env-file .env ‘YOUR-DOCKER-USERNAME’/‘TAG-NAME’
