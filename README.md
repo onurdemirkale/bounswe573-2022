@@ -16,9 +16,9 @@ Docker-Compose
 
 To run the Django application through Docker-Compose, switch to the directory of the Docker-Compose file using the preferred command line tool and run the following commands:
 
-docker-compose build
+`docker-compose build`
 
-docker-compose up
+`docker-compose up`
 
 Docker-Compose builds and starts a Docker image out of its current context and simultaneously starts a container running Postgres image as well. The networking between the containers are simplified and handled through Docker-Compose. Environment variables to connect the database and the Django application is specified in the Docker-Compose file.
 
